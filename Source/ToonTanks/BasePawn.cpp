@@ -3,6 +3,7 @@
 
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -22,16 +23,26 @@ ABasePawn::ABasePawn()
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh); // creating this as a child to the Turret
 }
 
-// Called when the game starts or when spawned
-void ABasePawn::BeginPlay()
+/// <summary>
+/// Rotates the turret to face a target
+/// </summary>
+/// <param name="target">The target to face.</param>
+void ABasePawn::RotateTurret(FVector target)
 {
-	Super::BeginPlay();
-	
-}
+	// formula to find facing vector is simply V = target - current location
+	FVector targetVector = target - TurretMesh->GetComponentLocation(); // note this is a WORLD SPACE ROTATION
 
-// Called every frame
-void ABasePawn::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+	// we only care about the yaw we don't want to mess with pitch or roll
+	// can set them at 0 individually OR just use one line
+	FRotator lookAtRotation = FRotator(0.f, targetVector.Rotation().Yaw, 0.f);
 
+	//setting the direction rotation like this causes the turret to snap around.  This looks bad.
+	//TurretMesh->SetWorldRotation(lookAtRotation); // only changes yaw, and this ia WORLD SPACE ROTATION
+
+	TurretMesh->SetWorldRotation(FMath::RInterpTo(TurretMesh->GetComponentRotation(), //The component we want to rotate
+		lookAtRotation, //the FRotator to work with
+		UGameplayStatics::GetWorldDeltaSeconds(this), 
+		10.f)); //speed of turret rotation
+
+	// challenge will be to know when to use local vs when to use world as well as to know what function to call to rotate
 }

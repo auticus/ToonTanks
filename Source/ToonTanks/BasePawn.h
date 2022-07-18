@@ -16,9 +16,8 @@ public:
 	ABasePawn();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	
+	void RotateTurret(FVector target);
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* CapsuleCollider; //forward declaration - we dont want to include the h file here we will do that in cpp
@@ -31,8 +30,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint; // no need to include this in h or cpp because it is a part of the Actors as well
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 };

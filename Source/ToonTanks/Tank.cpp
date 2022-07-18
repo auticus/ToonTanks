@@ -16,6 +16,41 @@ ATank::ATank()
 	MainCamera->SetupAttachment(SpringArmComponent);
 }
 
+void ATank::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	// search for the mouse cursor every frame
+	if (PlayerControllerRef == nullptr) return;
+
+	FHitResult hitResult;
+	PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility,
+		false, // if true will try to calculate the complex wireframe, otherwise if false uses the simple version which is lighter
+		hitResult);
+
+	/* Debug Sphere code here for future reference for learning.
+	DrawDebugSphere(GetWorld(),
+		hitResult.ImpactPoint,
+		25.f, //radius
+		12, //segments
+		FColor::Red,
+		false, //persistant lines
+		-1.f); //getting a sphere every frame
+	*/
+	
+	RotateTurret(hitResult.ImpactPoint);
+}
+
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//GetController() will return a type of AController*
+	//You cannot just assign AController to APlayerController (even though player controller is a child of Acontroller)
+	//However we know that the controller coming back is a Player Controller for this so we perform a cast
+	PlayerControllerRef = Cast<APlayerController>(GetController());
+}
+
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -23,7 +58,8 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);  // maps the MoveForward axis to this tank, and maps it to the Move function here.
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
-	PlayerInputComponent->BindAxis(TEXT("RotateTurret"), this, &ATank::RotateTurret);
+
+	// do I need mouse input?  The player controller already has this.
 }
 
 /// <summary>
@@ -49,13 +85,4 @@ void ATank::Turn(float Value)
 	FRotator Direction = FRotator::ZeroRotator;
 	Direction.Yaw = Value * TurnRate * UGameplayStatics::GetWorldDeltaSeconds(this);
 	AddActorLocalRotation(Direction, true);
-}
-
-/// <summary>
-/// Rotates the turret right or left.
-/// </summary>
-/// <param name="Value">A value indicating right (1.0) or left (-1.0)</param>
-void ATank::RotateTurret(float Value)
-{
-
 }

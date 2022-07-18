@@ -17,6 +17,13 @@ class TOONTANKS_API ATank : public ABasePawn
 public:
 	ATank();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera Components", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* SpringArmComponent;
@@ -30,9 +37,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 	float TurnRate = 45.f; // the speed of the pawn.
 
+	APlayerController* PlayerControllerRef;
 	void Move(float Value);
 	void Turn(float Value);
-	void RotateTurret(float Value);
 
 public:
 	// Called to bind functionality to input
