@@ -22,6 +22,9 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* BaseMesh;  // no need to include this in h or cpp because UStaticMeshComponent is a part of all Actors
+	
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UProjectileMovementComponent* ProjectileMovement;
 
 public:	
 	// Called every frame

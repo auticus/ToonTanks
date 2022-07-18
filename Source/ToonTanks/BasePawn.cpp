@@ -4,6 +4,7 @@
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Projectile.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -51,4 +52,8 @@ void ABasePawn::Fire()
 {
 	// invoked by player input or AI code
 	// tank class wires this up with player input
+	FVector location = ProjectileSpawnPoint->GetComponentLocation();
+	FRotator rotation = ProjectileSpawnPoint->GetComponentRotation();
+
+	GetWorld()->SpawnActor<AProjectile>(ProjectileClass, location, rotation);
 }

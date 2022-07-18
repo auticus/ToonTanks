@@ -31,4 +31,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint; // no need to include this in h or cpp because it is a part of the Actors as well
+
+	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	TSubclassOf<class AProjectile> ProjectileClass;
 };
