@@ -60,6 +60,8 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
 
 	// do I need mouse input?  The player controller already has this.
+
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire); //IE_Released would bind this if it was released instead of pressed
 }
 
 /// <summary>

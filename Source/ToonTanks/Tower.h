@@ -26,4 +26,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tower Statistics", meta = (AllowPrivateAccess = "true"))
 	float FireRange = 1000.f; // how far the turret can see and fire at a tank
+
+	//fire controls
+	FTimerHandle FireControlTimer;
+	float FireRate = 2.f;
+	void CheckFireCondition();
+	bool IsInRange();
 };

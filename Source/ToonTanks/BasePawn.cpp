@@ -46,3 +46,9 @@ void ABasePawn::RotateTurret(FVector target)
 
 	// challenge will be to know when to use local vs when to use world as well as to know what function to call to rotate
 }
+
+void ABasePawn::Fire()
+{
+	// invoked by player input or AI code
+	// tank class wires this up with player input
+}
