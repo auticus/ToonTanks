@@ -23,6 +23,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent) //this means you dont need to implement it in the cpp, but you can still call it, the Blueprint will implement it
 	void StartGame();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void GameOver(bool bWonGame);
+
 private:
 	class ATank* Tank;
 	class AToonTanksPlayerController* ToonTanksPlayerController;
@@ -30,4 +33,7 @@ private:
 	float StartDelay = 3.f;
 
 	void HandleGameStart();
+
+	int32 TargetTowers = 0;
+	int32 GetTargetTowerCount();
 };
