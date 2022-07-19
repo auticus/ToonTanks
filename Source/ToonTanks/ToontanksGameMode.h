@@ -20,6 +20,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintImplementableEvent) //this means you dont need to implement it in the cpp, but you can still call it, the Blueprint will implement it
+	void StartGame();
+
 private:
 	class ATank* Tank;
 	class AToonTanksPlayerController* ToonTanksPlayerController;
