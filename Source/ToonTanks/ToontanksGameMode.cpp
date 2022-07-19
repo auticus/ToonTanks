@@ -10,8 +10,7 @@
 void AToontanksGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
-	ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+	HandleGameStart();
 }
 
 void AToontanksGameMode::ActorDied(AActor* deadActor)
@@ -27,5 +26,25 @@ void AToontanksGameMode::ActorDied(AActor* deadActor)
 	else if (ATower* destroyedTower = Cast<ATower>(deadActor))
 	{
 		destroyedTower->HandleDestruction();
+	}
+}
+
+void AToontanksGameMode::HandleGameStart()
+{
+	Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
+	ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+
+	if (ToonTanksPlayerController)
+	{
+		ToonTanksPlayerController->SetPlayerEnabledState(false);
+		FTimerHandle PlayerEnableTimerHandle;
+
+		// here we have a delegate that takes a function that also has input parameters
+		FTimerDelegate PlayerEnableTimerDelegate = FTimerDelegate::CreateUObject(
+			ToonTanksPlayerController, // the object that houses the function
+			&AToonTanksPlayerController::SetPlayerEnabledState, // the reference to the function with the input 
+			true // the input
+		);
+		GetWorldTimerManager().SetTimer(PlayerEnableTimerHandle, PlayerEnableTimerDelegate, StartDelay, false); //false means do not loop
 	}
 }
