@@ -15,6 +15,9 @@ public:
 	// Sets default values for this actor's properties
 	AProjectile();
 
+	UPROPERTY(EditAnywhere)
+	float Damage = 50.f;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -25,6 +28,10 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UProjectileMovementComponent* ProjectileMovement;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	// the parameters here are very specific to a hit reaction
 
 public:	
 	// Called every frame
