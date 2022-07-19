@@ -58,3 +58,8 @@ void ABasePawn::Fire()
 	auto projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, location, rotation);
 	projectile->SetOwner(this);  // we will need to know who owns the projectile so we can get its controller in the health component
 }
+
+void ABasePawn::HandleDestruction()
+{
+	//todo: implement fx for death
+}

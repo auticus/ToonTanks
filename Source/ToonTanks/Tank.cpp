@@ -41,6 +41,18 @@ void ATank::Tick(float DeltaTime)
 	RotateTurret(hitResult.ImpactPoint);
 }
 
+APlayerController* ATank::GetPlayerController() const
+{
+	return PlayerControllerRef;
+}
+
+void ATank::HandleDestruction()
+{
+	Super::HandleDestruction();
+	SetActorHiddenInGame(true);
+	SetActorTickEnabled(false);
+}
+
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
