@@ -7,6 +7,7 @@
 #include "Projectile.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Sound/SoundBase.h"
+#include "Camera/CameraShakeBase.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -76,4 +77,10 @@ void ABasePawn::HandleDestruction()
 	//IMPORTANT - ExplosionParticles must be a UParticleSystem NOT a UParticleSystemComponent!!
 	UGameplayStatics::SpawnEmitterAtLocation(this, ExplosionParticles, GetActorLocation(), GetActorRotation());
 	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
+	
+	//Shake the camera of the player
+	if (DeathCameraShakeClass)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
+	}
 }
