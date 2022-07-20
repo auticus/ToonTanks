@@ -33,7 +33,10 @@ void ATower::HandleDestruction()
 
 void ATower::CheckFireCondition()
 {
-	if (IsInRange()) Fire();
+	if (IsInRange() && PlayerTank->bAlive)
+	{
+		Fire();
+	}
 }
 
 bool ATower::IsInRange()
