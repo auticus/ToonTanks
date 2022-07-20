@@ -33,6 +33,12 @@ private:
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 	// the parameters here are very specific to a hit reaction
 
+	UPROPERTY(EditAnywhere, Category = "Components")
+	class UParticleSystem* HitParticles;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UParticleSystemComponent* SmokeTrailParticles;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

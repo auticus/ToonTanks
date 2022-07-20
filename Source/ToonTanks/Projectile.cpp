@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -20,6 +21,10 @@ AProjectile::AProjectile()
 	ProjectileMovement->MaxSpeed = 1300.f;
 	ProjectileMovement->InitialSpeed = 1300.f;
 	// this is a component - not adding it to the hierarchy of objects
+
+	// Create the smoke trail that will attach and follow the projectile
+	SmokeTrailParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Smoke Trail Particles Component"));
+	SmokeTrailParticles->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -50,7 +55,11 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	auto owner = GetOwner();  //this owner is set in the BasePawn when we spawn the projectile
-	if (owner == nullptr || OtherActor == nullptr) return;
+	if (owner == nullptr || OtherActor == nullptr)
+	{
+		Destroy();
+		return;
+	}
 
 	auto instigatorController = owner->GetInstigatorController();
 	auto damageTypeClass = UDamageType::StaticClass();
@@ -62,8 +71,10 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 			instigatorController, //the event instigator
 			this, //the damage causer
 			damageTypeClass);  //the damage type class
-
-		Destroy(); //once we've applied damage... hasta projectile.
+		
+		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticles, GetActorLocation(), GetActorRotation());
 	}
+	
+	Destroy(); //once we've applied damage... hasta projectile.
 }
 
