@@ -7,6 +7,7 @@
 #include "GameFramework/DamageType.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Sound/SoundBase.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -35,6 +36,11 @@ void AProjectile::BeginPlay()
 	// you can find what the signature needs to be by drilling into OnComponentHit and then drilling into the type FComponentHitSignature
 	// the documentation for this on the unreal site is garbage.
 	BaseMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+
+	if (LaunchSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LaunchSound, GetActorLocation());
+	}
 }
 
 // Called every frame
@@ -63,6 +69,11 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 
 	auto instigatorController = owner->GetInstigatorController();
 	auto damageTypeClass = UDamageType::StaticClass();
+
+	if (HitSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+	}
 
 	if (OtherActor != this && OtherActor != owner) // we don't want to damage ourselves or our owning actor
 	{

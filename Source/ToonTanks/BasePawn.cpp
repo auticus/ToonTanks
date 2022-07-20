@@ -5,6 +5,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Sound/SoundBase.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -22,6 +24,10 @@ ABasePawn::ABasePawn()
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Projectile Spawn Point"));
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh); // creating this as a child to the Turret
+
+	// Create the explosion particles
+	ExplosionParticles = CreateDefaultSubobject<UParticleSystem>(TEXT("Explosion Particles Component"));
+	//do not attach it to anything - this will be spawned in
 }
 
 /// <summary>
@@ -61,5 +67,13 @@ void ABasePawn::Fire()
 
 void ABasePawn::HandleDestruction()
 {
-	//todo: implement fx for death
+	if (ExplosionParticles == nullptr) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Explosion particles not set!"));
+		return;
+	}
+
+	//IMPORTANT - ExplosionParticles must be a UParticleSystem NOT a UParticleSystemComponent!!
+	UGameplayStatics::SpawnEmitterAtLocation(this, ExplosionParticles, GetActorLocation(), GetActorRotation());
+	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
 }

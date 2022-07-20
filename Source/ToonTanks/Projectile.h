@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
+class USoundBase;
+
 UCLASS()
 class TOONTANKS_API AProjectile : public AActor
 {
@@ -38,6 +40,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UParticleSystemComponent* SmokeTrailParticles;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+	USoundBase* LaunchSound;
+	
+	UPROPERTY(EditAnywhere, Category = "Components")
+	USoundBase* HitSound;
 
 public:	
 	// Called every frame
